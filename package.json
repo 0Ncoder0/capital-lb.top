@@ -35,7 +35,9 @@
     "prettier": "^1.19.1",
     "sass-loader": "^8.0.0",
     "typescript": "~3.5.3",
-    "vue-template-compiler": "^2.6.10"
+    "vue-template-compiler": "^2.6.10",
+    "pug": "^2.0.3",
+    "pug-plain-loader": "^1.0.0"
   },
   "eslintConfig": {
     "root": true,
@@ -47,7 +49,9 @@
       "@vue/prettier",
       "@vue/typescript"
     ],
-    "rules": {},
+    "rules": {
+      "no-console":"off"
+    },
     "parserOptions": {
       "parser": "@typescript-eslint/parser"
     },
