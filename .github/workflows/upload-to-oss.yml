@@ -1,7 +1,7 @@
-name: learn-github-actions
+name: upload-to-oss
 on: [push]
 jobs:
-  check-bats-version:
+  upload-to-oss:
     runs-on: ubuntu-latest
     steps:
       - name: Upload to oss
