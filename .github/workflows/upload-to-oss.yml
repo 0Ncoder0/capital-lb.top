@@ -9,7 +9,7 @@ jobs:
         uses: tvrcgo/upload-to-oss@master
         with:
           key-id: ${{ secrets.OSS_KEY_ID }}
-          key-secret: 123
+          key-secret: ${{ secrets.OSS_KEY_SECRET }}
           region: oss-cn-hangzhou
           bucket: capital-lb
           asset-path: ./
