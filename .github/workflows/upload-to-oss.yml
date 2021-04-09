@@ -8,8 +8,8 @@ jobs:
         id: upload_to_oss
         uses: tvrcgo/upload-to-oss@master
         with:
-          key-id: ${{ secrets.OSS_KEY_ID }}
-          key-secret: ${{ secrets.OSS_KEY_SECRET }}
+          key-id: 123
+          key-secret: 123
           region: oss-cn-hangzhou
           bucket: capital-lb
           asset-path: ./
