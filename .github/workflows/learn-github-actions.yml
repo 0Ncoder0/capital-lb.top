@@ -1,5 +1,7 @@
 name: learn-github-actions
 on: [push]
+env:
+  SERVER: ali-oss
 jobs:
   check-bats-version:
     runs-on: ubuntu-latest
