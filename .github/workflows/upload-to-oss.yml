@@ -4,6 +4,7 @@ jobs:
   upload-to-oss:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: Upload to oss
         id: upload_to_oss
         uses: yinlinyang/ali-oss-utils@1.0.1
@@ -12,5 +13,5 @@ jobs:
           access-key-secret: ${{ secrets.OSS_KEY_SECRET }}
           region: oss-cn-hangzhou
           bucket: capital-lb
-          source: /
+          source: /**/*
           target: /
