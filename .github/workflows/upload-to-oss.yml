@@ -4,14 +4,11 @@ jobs:
   upload-to-oss:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Upload to oss
-        id: upload_to_oss
-        uses: yinlinyang/ali-oss-utils@1.0.1
+      - name: upload files to OSS
+        uses: fangbinwei/aliyun-oss-website-action@v1
         with:
-          access-key-id: ${{ secrets.OSS_KEY_ID }}
-          access-key-secret: ${{ secrets.OSS_KEY_SECRET }}
-          region: oss-cn-hangzhou
-          bucket: capital-lb
-          source: /
-          target: /
+            accessKeyId: ${{ secrets.OSS_KEY_ID }}
+            accessKeySecret: ${{ secrets.OSS_KEY_SECRET }}
+            bucket: capital-lb
+            endpoint: oss-cn-hangzhou.aliyuncs.com
+            folder: /
