@@ -13,5 +13,5 @@ jobs:
           access-key-secret: ${{ secrets.OSS_KEY_SECRET }}
           region: oss-cn-hangzhou
           bucket: capital-lb
-          source: /**/*
+          source: /
           target: /
