@@ -4,15 +4,10 @@ jobs:
   upload-to-oss:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - run: ls
-      - name: Upload to oss
-        id: upload_to_oss
-        uses: tvrcgo/upload-to-oss@v0.1.1
+      - uses: actions/checkout@master
+      - uses: manyuanrong/setup-ossutil@v2.0
         with:
-          key-id: ${{ secrets.OSS_KEY_ID }}
-          key-secret: ${{ secrets.OSS_KEY_SECRET }}
-          region: oss-cn-hangzhou
-          bucket: capital-lb
-          asset-path: ./
-          target-path: /
+          endpoint: 	oss-cn-hangzhou.aliyuncs.com
+          access-key-id: ${{ secrets.OSS_KEY_ID }}
+          access-key-secret: ${{ secrets.OSS_KEY_SECRET  }}
+      - run: ossutil cp -rf / oss://capital-lb --exclude index.html
