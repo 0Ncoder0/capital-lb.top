@@ -4,6 +4,7 @@ jobs:
   upload-to-oss:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - run: ls
       - name: Upload to oss
         id: upload_to_oss
