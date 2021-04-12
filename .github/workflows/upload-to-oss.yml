@@ -10,4 +10,4 @@ jobs:
           endpoint: 	oss-cn-hangzhou.aliyuncs.com
           access-key-id: ${{ secrets.OSS_KEY_ID }}
           access-key-secret: ${{ secrets.OSS_KEY_SECRET  }}
-      - run: ossutil cp -rf / oss://capital-lb --exclude index.html
+      - run: ossutil cp -rf ./ oss://capital-lb --exclude index.html
