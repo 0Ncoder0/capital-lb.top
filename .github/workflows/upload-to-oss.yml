@@ -1,5 +1,5 @@
 name: upload-to-oss
-on: [push]
+on: workflow_dispatch
 jobs:
   upload-to-oss:
     runs-on: ubuntu-latest
