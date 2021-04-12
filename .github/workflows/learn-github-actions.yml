@@ -1,7 +1,5 @@
 name: learn-github-actions
-on: []
-env:
-  SERVER: ali-oss
+on: workflow_dispatch
 jobs:
   check-bats-version:
     runs-on: ubuntu-latest
