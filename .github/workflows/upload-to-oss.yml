@@ -4,6 +4,7 @@ jobs:
   upload-to-oss:
     runs-on: ubuntu-latest
     steps:
+      - run: ls
       - name: Upload to oss
         id: upload_to_oss
         uses: tvrcgo/upload-to-oss@v0.1.1
