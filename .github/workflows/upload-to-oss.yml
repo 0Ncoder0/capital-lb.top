@@ -4,11 +4,13 @@ jobs:
   upload-to-oss:
     runs-on: ubuntu-latest
     steps:
-      - name: upload files to OSS
-        uses: fangbinwei/aliyun-oss-website-action@v1
+      - name: Upload to oss
+        id: upload_to_oss
+        uses: tvrcgo/upload-to-oss@v0.1.1
         with:
-            accessKeyId: ${{ secrets.OSS_KEY_ID }}
-            accessKeySecret: ${{ secrets.OSS_KEY_SECRET }}
-            bucket: capital-lb
-            endpoint: oss-cn-hangzhou.aliyuncs.com
-            folder: /
+          key-id: ${{ secrets.OSS_KEY_ID }}
+          key-secret: ${{ secrets.OSS_KEY_SECRET }}
+          region: oss-cn-hangzhou
+          bucket: capital-lb
+          asset-path: ./
+          target-path: /
