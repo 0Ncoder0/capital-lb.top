@@ -17,6 +17,13 @@ export default class Snake {
   /** 设置蛇身坐标 */
   setPositions = positions => {
     this.positions = positions || []
+    return this
+  }
+
+  /** 增长蛇身 */
+  lengthen = () => {
+    this.positions.push([...this.positions[this.positions.length - 1]])
+    return this
   }
 
   /** 移动 */
@@ -43,13 +50,14 @@ export default class Snake {
         break
       }
       default: {
-        break
+        throw new Error('wrong direction ' + this.direction)
       }
     }
-
     for (let i = this.positions.length - 1; i >= 1; i--) {
       this.positions[i] = [...this.positions[i - 1]]
     }
     this.positions[0] = [x, y]
+
+    return this
   }
 }
