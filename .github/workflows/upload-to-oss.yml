@@ -1,5 +1,10 @@
 name: upload-to-oss
-on: workflow_dispatch
+on: 
+  workflow_dispatch:
+  push:
+    branches:
+      - develop
+      
 env: 
   bucket: capital-lb
 jobs:
