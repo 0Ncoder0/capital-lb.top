@@ -21,5 +21,5 @@ jobs:
           access-key-id: ${{ secrets.OSS_KEY_ID }}
           access-key-secret: ${{ secrets.OSS_KEY_SECRET  }}
           
-      - run: ossutil cp -rf ./dist oss://${{ env.bucket }} --exclude index.html
-      - run: ossutil cp -rf ./dist oss://${{ env.bucket }} --include index.html
+      - run: ossutil cp -rf ./build oss://${{ env.bucket }} --exclude index.html
+      - run: ossutil cp -rf ./build oss://${{ env.bucket }} --include index.html
