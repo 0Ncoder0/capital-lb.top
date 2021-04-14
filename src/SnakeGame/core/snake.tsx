@@ -1,21 +1,14 @@
+import { Position, Direction } from './types'
+
 /** 蛇 */
 export default class Snake {
-  /** 左移 */
-  static Left = 'Left'
-  /** 右移 */
-  static Right = 'Right'
-  /** 上移 */
-  static Top = 'Top'
-  /** 下移 */
-  static Bottom = 'Bottom'
-
   /** 身体下标组 */
-  positions = []
+  positions: Position[] = []
   /** 移动方向 */
-  direction = Snake.Right
+  direction = Direction.Right
 
   /** 设置蛇身坐标 */
-  setPositions = positions => {
+  setPositions = (positions: Position[]) => {
     this.positions = positions || []
     return this
   }
@@ -29,7 +22,7 @@ export default class Snake {
   /** 移动 */
   move = () => {
     if (!this.positions.length) return
-    const { Left, Right, Top, Bottom } = Snake
+    const { Left, Right, Top, Bottom } = Direction
 
     let [x, y] = this.positions[0]
     switch (this.direction) {

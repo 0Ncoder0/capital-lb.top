@@ -1,12 +1,14 @@
+import { ItemEnum, Position } from './types'
+
 /** 食物 */
 export default class Food {
   /** 位置坐标 */
-  position = null
+  position: Position | null = null
 
   /** 生成食物坐标 */
-  create = gameMap => {
-    const availables = []
-    gameMap.forEach((row, y) => row.forEach((block, x) => block && availables.push([x, y])))
+  create = (gameMap: ItemEnum[][]) => {
+    const availables: Array<Position> = []
+    gameMap.forEach((row, y) => row.forEach((block, x) => block === ItemEnum.Space && availables.push([x, y])))
     const index = Math.floor(Math.random() * availables.length)
     this.position = availables[index]
     return this

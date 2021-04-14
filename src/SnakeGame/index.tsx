@@ -1,21 +1,31 @@
-import React from 'react'
+import React, { CSSProperties } from 'react'
+import { Direction, ItemEnum } from './core/types'
+import GameMap from './core/game-map'
 import SnakeGame from './core/main'
 
+type State = {
+  gameMap?: GameMap
+}
+
 /** 贪吃蛇 */
-export default class SnakeGameView extends React.Component {
-  constructor() {
-    super()
-    this.state = { gameMap: [] }
-    this.instance = new SnakeGame()
+export default class SnakeGameView<T> extends React.Component {
+  public instance: SnakeGame
+  public state: State = {}
+
+  constructor(props: T) {
+    super(props)
+    this.instance = new SnakeGame().init()
+    this.state.gameMap = this.instance.gameMap
+
     this.instance.afterFrame = () => this.setState({ gameMap: this.instance.gameMap })
     this.instance.onGameOver = () => window.alert('Game Over')
-    this.instance.setTimer()
     this.setListeners()
   }
+
   /** 设置监听器 */
   setListeners = () => {
     const snake = this.instance.snake
-    const { Left, Right, Top, Bottom } = SnakeGame.Snake
+    const { Left, Right, Top, Bottom } = Direction
     /** 按键到方向的映射 */
     const key2dir = new Map([
       ['w', Top],
@@ -31,9 +41,12 @@ export default class SnakeGameView extends React.Component {
       [Right, Left]
     ])
     window.addEventListener('keydown', event => {
+      if (!this.instance.timer) {
+        this.instance.start()
+      }
       const key = event.key
       const dir = key2dir.get(key)
-      const isOpposite = opposite.get(dir) === snake.direction
+      const isOpposite = dir && opposite.get(dir) === snake.direction
       if (dir && !isOpposite) {
         snake.direction = dir
       }
@@ -43,20 +56,18 @@ export default class SnakeGameView extends React.Component {
   /** 渲染行 */
   render() {
     const item2color = new Map([
-      [SnakeGame.GameMap.Food, 'red'],
-      [SnakeGame.GameMap.SnakeBody, 'black'],
-      [SnakeGame.GameMap.Space, 'gray']
+      [ItemEnum.Food, 'red'],
+      [ItemEnum.SnakeBody, 'black'],
+      [ItemEnum.Space, 'gray']
     ])
-    const blockStyle = () => ({
+
+    const blockStyle = (): CSSProperties => ({
       height: '20px',
       width: '20px',
       lineHeight: '20px',
       textAlign: 'center'
     })
-
-    const rowStyle = () => ({ display: 'flex' })
-
-    const containerStyle = () => ({
+    const containerStyle = (): CSSProperties => ({
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
@@ -66,23 +77,23 @@ export default class SnakeGameView extends React.Component {
       paddingBottom: '100px'
     })
 
-    const map = this.state.gameMap.map((row, index) => {
+    const map = this.state.gameMap?.map((row, index) => {
       const blocks = row.map((item, index) => (
         <div
           key={'block' + index}
           style={{
-            ...blockStyle(item),
+            ...blockStyle(),
             backgroundColor: item2color.get(item)
           }}
         />
       ))
       return (
-        <div key={'row' + index} style={rowStyle()}>
+        <div key={'row' + index} style={{ display: 'flex' }}>
           {blocks}
         </div>
       )
     })
 
-    return <div style={containerStyle()}>{map}</div>
+    return <div style={{ ...containerStyle() }}>{map || ''}</div>
   }
 }

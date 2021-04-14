@@ -3,30 +3,42 @@ import GameMap from './game-map'
 import Snake from './snake'
 /** 贪吃蛇游戏主体 */
 export default class SnakeGame {
-  static GameMap = GameMap
-  static Snake = Snake
-
   /** 地图 */
-  gameMap = new GameMap().initMap()
+  gameMap = new GameMap()
+
   /** 蛇 */
-  snake = new Snake().setPositions([
-    [5, 0],
-    [4, 0],
-    [3, 0],
-    [2, 0],
-    [1, 0]
-  ])
+  snake = new Snake()
+
   /** 食物 */
-  food = new Food().create(this.gameMap)
+  food = new Food()
 
   /** 计时器 */
-  timer = null
+  timer: NodeJS.Timeout | null = null
   /** 计时器间隔 */
   interval = 100
   /** 单帧运行后的钩子函数 */
-  afterFrame = null
+  afterFrame: Function | null = null
   /** 游戏结束后的钩子函数 */
-  onGameOver = null
+  onGameOver: Function | null = null
+
+  /** 初始化游戏 */
+  init = () => {
+    const { gameMap, snake, food } = this
+    snake.setPositions([
+      [4, 0],
+      [3, 0],
+      [2, 0],
+      [1, 0],
+      [0, 0]
+    ])
+    gameMap.set({ snake })
+    food.create(gameMap)
+    gameMap.set({ food })
+    return this
+  }
+
+  /** 开始游戏 */
+  start = () => this.setTimer()
 
   /** 设置计时器 */
   setTimer = () => {
@@ -39,7 +51,8 @@ export default class SnakeGame {
 
   /** 清除计时器 */
   clearTimer = () => {
-    clearInterval(this.timer)
+    if (this.timer) clearInterval(this.timer)
+    this.timer = null
     return this
   }
 
@@ -54,8 +67,8 @@ export default class SnakeGame {
         this.onGameOver()
       }
     } else {
-      gameMap.clearMap()
-      gameMap.setMap({ snake, food })
+      gameMap.clear()
+      gameMap.set({ snake, food })
 
       if (this.isSnakeRunIntoFood()) {
         snake.lengthen()
@@ -79,7 +92,11 @@ export default class SnakeGame {
   }
   /** 蛇是否吃到食物 */
   isSnakeRunIntoFood = () => {
-    const [fx, fy] = this.food.position
-    return !!this.snake.positions.find(([x, y]) => x === fx && y === fy)
+    if (this.food.position) {
+      const [fx, fy] = this.food.position
+      return !!this.snake.positions.find(([x, y]) => x === fx && y === fy)
+    } else {
+      return false
+    }
   }
 }
