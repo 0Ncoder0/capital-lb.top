@@ -14,7 +14,6 @@ export default class SnakeGameView extends React.Component {
 
   public state!: {
     gameMap: GameMap;
-    gameStatus: GameStatusEnum;
   };
 
   constructor(data: never) {
@@ -24,18 +23,16 @@ export default class SnakeGameView extends React.Component {
     this.controller = new GameController({ snakeGame: this.snakeGame }).init();
 
     this.state = {
-      gameMap: this.snakeGame.gameMap,
-      gameStatus: this.snakeGame.status
+      gameMap: this.snakeGame.gameMap
     };
 
     this.snakeGame.onFrame = () => this.setState({ gameMap: this.snakeGame.gameMap });
 
     this.snakeGame.onStatusChanged = status => {
-      console.log(status);
       if (status === GameStatusEnum.Over) {
         window.alert("Game Over");
       }
-      this.setState({ gameStatus: status });
+      this.setState({});
     };
   }
 
@@ -54,7 +51,7 @@ export default class SnakeGameView extends React.Component {
     return (
       <div style={containerStyle()}>
         <div style={actionRowStyle()}>
-          <StatusControlButton snakeGame={this.snakeGame} gameStatus={this.state.gameStatus || GameStatusEnum.Pause} />
+          <StatusControlButton snakeGame={this.snakeGame} />
         </div>
         <div style={{ height: "24px" }}></div>
         <div>

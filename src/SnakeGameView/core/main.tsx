@@ -4,6 +4,8 @@ import Snake from "./snake";
 import { Direction, GameStatusEnum } from "./types";
 /** 贪吃蛇游戏主体 */
 export default class SnakeGame {
+  /** 计时器 */
+  private timer: NodeJS.Timeout | null = null;
   /** 计时器间隔 */
   private interval = 100;
   /** 状态 */
@@ -19,7 +21,7 @@ export default class SnakeGame {
   /** 状态 */
   public set status(status: GameStatusEnum) {
     this._status = status;
-    if (this.onStatusChanged) this.onStatusChanged(this._status);
+    this.onStatusChanged && this.onStatusChanged(status);
   }
 
   /** 状态 */
@@ -40,11 +42,13 @@ export default class SnakeGame {
   };
   /** 暂停游戏 */
   public pause = () => {
+    this.clearTimer();
     this.status = GameStatusEnum.Pause;
     return this;
   };
   /** 结束游戏 */
   public over = () => {
+    this.clearTimer();
     this.status = GameStatusEnum.Over;
     return;
   };
@@ -68,12 +72,16 @@ export default class SnakeGame {
 
   /** 设置计时器 */
   private setTimer = () => {
-    setTimeout(() => {
+    this.timer = setTimeout(() => {
       this.runFrame();
       this.onFrame && this.onFrame();
       this.status === GameStatusEnum.Running && this.setTimer();
     }, this.interval);
     return this;
+  };
+
+  private clearTimer = () => {
+    if (this.timer) clearTimeout(this.timer);
   };
 
   /** 单帧运行 */

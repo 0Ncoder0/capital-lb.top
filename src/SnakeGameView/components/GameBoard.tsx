@@ -36,16 +36,29 @@ export default class GameBoard extends React.Component {
     boxSizing: "border-box"
   });
 
-  private getBlock = (item: ItemEnum, index: number) => <div key={"block" + index} style={this.blockStyle(item)} />;
+  private Blocks = (props: { items: ItemEnum[] }) => (
+    <>
+      {props.items.map((item, index) => (
+        <div key={"block" + index} style={this.blockStyle(item)} />
+      ))}
+    </>
+  );
 
-  private getRow = (items: ItemEnum[], index: number) => (
-    <div key={"row" + index} style={this.rowStyle()}>
-      {items.map(this.getBlock)}
-    </div>
+  private Rows = (props: { gameMap: ItemEnum[][] }) => (
+    <>
+      {props.gameMap.map((items, index) => (
+        <div style={this.rowStyle()} key={"row" + index}>
+          <this.Blocks items={items} />
+        </div>
+      ))}
+    </>
   );
 
   render() {
-    const map = this.props.gameMap.map(this.getRow);
-    return <div style={this.containerStyle()}>{map || ""}</div>;
+    return (
+      <div style={this.containerStyle()}>
+        <this.Rows gameMap={this.props.gameMap} />
+      </div>
+    );
   }
 }
