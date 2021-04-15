@@ -28,12 +28,12 @@ export default class StatusController extends React.Component {
 
   /** 状态 => 按钮 */
   private status2button = new Map([
-    [GameStatusEnum.Running, <this.PauseBtn />],
-    [GameStatusEnum.Pause, <this.StartBtn />],
-    [GameStatusEnum.Over, <this.RestartBtn />]
+    [GameStatusEnum.Running, () => <this.PauseBtn />],
+    [GameStatusEnum.Pause, () => <this.StartBtn />],
+    [GameStatusEnum.Over, () => <this.RestartBtn />]
   ]);
 
-  private Btn = () => this.status2button.get(this.props.snakeGame.status) || <></>;
+  private Btn = () => this.status2button.get(this.props.snakeGame.status)?.call(null) || <></>;
 
   render() {
     return <this.Btn />;
