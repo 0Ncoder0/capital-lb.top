@@ -1,16 +1,18 @@
 import React, { CSSProperties } from "react";
 
+import { GameStatusEnum } from "./core/types";
 import GameMap from "./core/game-map";
 import SnakeGame from "./core/main";
-import { GameStatusEnum } from "./core/types";
-import GameController from "./controller";
-import StatusControlButton from "./components/StatusControlButton";
-import GameBoard from "./components/GameBoard";
+
+import GameBoard from "./components/game-board";
+import EventListener from "./event-listener/index";
+import StatusController from "./components/status-controller";
+import SpeedController from "./components/speed-controller";
 
 /** 贪吃蛇 */
 export default class SnakeGameView extends React.Component {
   private snakeGame: SnakeGame;
-  private controller: GameController;
+  private eventListener: EventListener;
 
   public state!: {
     gameMap: GameMap;
@@ -20,7 +22,7 @@ export default class SnakeGameView extends React.Component {
     super(data);
 
     this.snakeGame = new SnakeGame().init();
-    this.controller = new GameController({ snakeGame: this.snakeGame }).init();
+    this.eventListener = new EventListener({ snakeGame: this.snakeGame }).init();
 
     this.state = {
       gameMap: this.snakeGame.gameMap
@@ -51,7 +53,8 @@ export default class SnakeGameView extends React.Component {
     return (
       <div style={containerStyle()}>
         <div style={actionRowStyle()}>
-          <StatusControlButton snakeGame={this.snakeGame} />
+          <StatusController snakeGame={this.snakeGame} />
+          <SpeedController snakeGame={this.snakeGame} />
         </div>
         <div style={{ height: "24px" }}></div>
         <div>

@@ -5,8 +5,8 @@ import SnakeGame from "../core/main";
 import { GameStatusEnum } from "../core/types";
 
 /** 游戏进行状态控制按钮 */
-export default class StatusControlButton extends React.Component {
-  props!: { snakeGame: SnakeGame };
+export default class StatusController extends React.Component {
+  public props!: { snakeGame: SnakeGame };
 
   private PauseBtn = () => (
     <Button danger={true} type="primary" onClick={() => this.props.snakeGame.pause()}>
@@ -34,6 +34,7 @@ export default class StatusControlButton extends React.Component {
   ]);
 
   private Btn = () => this.status2button.get(this.props.snakeGame.status) || <></>;
+
   render() {
     return <this.Btn />;
   }

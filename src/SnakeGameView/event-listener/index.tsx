@@ -1,7 +1,7 @@
 import SnakeGame from "../core/main";
 import { GameStatusEnum, Direction } from "../core/types";
 /** 控制器 */
-export default class GameController {
+export default class EventListener {
   private snakeGame!: SnakeGame;
 
   constructor(data: { snakeGame: SnakeGame }) {
@@ -9,11 +9,11 @@ export default class GameController {
   }
 
   init() {
-    return this.setSpaceController().setDirectionController();
+    return this.setSpaceListener().setDirectionListener().setSpeedListener();
   }
 
   /** 空格键操作 */
-  setSpaceController = () => {
+  setSpaceListener = () => {
     window.addEventListener("keydown", event => {
       if (event.code !== "Space") return;
       /** 游戏状态 => 空格键操作 */
@@ -30,7 +30,7 @@ export default class GameController {
   };
 
   /** 方向键操作 */
-  setDirectionController = () => {
+  setDirectionListener = () => {
     /** 方向 => 反方向 */
     const direction2opposite = new Map([
       [Direction.Top, Direction.Bottom],
@@ -56,6 +56,28 @@ export default class GameController {
       const isOpposite = dir && direction2opposite.get(dir) === direction;
       if (dir && !isOpposite) {
         snake.direction = dir;
+      }
+    });
+    return this;
+  };
+
+  setSpeedListener = () => {
+    window.addEventListener("keydown", event => {
+      const key = event.key;
+
+      const increase = "-";
+      const decrease = "=";
+      let interval = this.snakeGame.interval;
+
+      if (key === increase) {
+        interval += 10;
+      }
+      if (key === decrease) {
+        interval -= 10;
+      }
+
+      if (interval <= 200 && interval >= 10) {
+        this.snakeGame.interval = interval;
       }
     });
     return this;

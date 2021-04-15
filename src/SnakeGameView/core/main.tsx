@@ -6,10 +6,10 @@ import { Direction, GameStatusEnum } from "./types";
 export default class SnakeGame {
   /** 计时器 */
   private timer: NodeJS.Timeout | null = null;
-  /** 计时器间隔 */
-  private interval = 100;
   /** 状态 */
   private _status = GameStatusEnum.Pause;
+  /** 计时器间隔 */
+  private _interval = 110;
 
   /** 地图 */
   public gameMap = new GameMap();
@@ -23,16 +23,26 @@ export default class SnakeGame {
     this._status = status;
     this.onStatusChanged && this.onStatusChanged(status);
   }
-
   /** 状态 */
   public get status() {
     return this._status;
+  }
+  /** 计时器间隔 */
+  set interval(interval: number) {
+    this._interval = interval;
+    this.onIntervalChanged && this.onIntervalChanged(interval);
+  }
+  /** 计时器间隔 */
+  get interval() {
+    return this._interval;
   }
 
   /** 单帧运行后的钩子函数 */
   public onFrame: { (): void } | null = null;
   /** 状态变更后的钩子函数 */
   public onStatusChanged: { (status: GameStatusEnum): void } | null = null;
+  /** 计时器间隔变更后的钩子函数 */
+  public onIntervalChanged: { (interval: number): void } | null = null;
 
   /** 开始游戏 */
   public start = () => {
