@@ -1,4 +1,5 @@
 import React, { CSSProperties } from "react";
+import { Tooltip } from "antd";
 
 import { GameStatusEnum } from "./core/types";
 import GameMap from "./core/game-map";
@@ -53,8 +54,14 @@ export default class SnakeGameView extends React.Component {
     return (
       <div style={containerStyle()}>
         <div style={actionRowStyle()}>
-          <StatusController snakeGame={this.snakeGame} />
-          <SpeedController snakeGame={this.snakeGame} />
+          <div style={{ width: "120px" }}>
+            <StatusController snakeGame={this.snakeGame} />
+          </div>
+          <Tooltip title="速度" color="blue">
+            <span>
+              <SpeedController snakeGame={this.snakeGame} />
+            </span>
+          </Tooltip>
         </div>
         <div style={{ height: "24px" }}></div>
         <div>

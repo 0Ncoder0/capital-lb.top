@@ -8,9 +8,10 @@ export default class GameBoard extends React.Component {
 
   /** 地图元素 => 颜色 */
   private item2color = new Map([
-    [ItemEnum.Food, "red"],
-    [ItemEnum.SnakeBody, "black"],
-    [ItemEnum.Space, "gray"]
+    [ItemEnum.Food, "#ff85c0"],
+    [ItemEnum.SnakeBody, "#434343"],
+    [ItemEnum.SnakeHead, "#434343"],
+    [ItemEnum.Space, "#bfbfbf"]
   ]);
 
   /** 块样式 */

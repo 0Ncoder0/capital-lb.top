@@ -5,6 +5,8 @@ export type Position = [x: number, y: number];
 export enum ItemEnum {
   /** 蛇身 */
   SnakeBody = "SnakeBody",
+  /** 蛇头 */
+  SnakeHead = "SnakeHead",
   /** 食物 */
   Food = "Food",
   /** 空白 */

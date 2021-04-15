@@ -47,9 +47,13 @@ export default class GameMap extends Array<Array<ItemEnum>> {
 
     // set snake
     if (snake) {
-      snake.positions.forEach(position => {
+      snake.positions.forEach((position, index) => {
         const [x, y] = position;
-        this[y][x] = ItemEnum.SnakeBody;
+        if (index === 0) {
+          this[y][x] = ItemEnum.SnakeHead;
+        } else {
+          this[y][x] = ItemEnum.SnakeBody;
+        }
       });
     }
     return this;
