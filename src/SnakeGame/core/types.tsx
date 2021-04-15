@@ -1,24 +1,34 @@
 /** 坐标 */
-export type Position = [x: number, y: number]
+export type Position = [x: number, y: number];
 
 /** 物体 */
 export enum ItemEnum {
   /** 蛇身 */
-  SnakeBody = 'SnakeBody',
+  SnakeBody = "SnakeBody",
   /** 食物 */
-  Food = 'Food',
+  Food = "Food",
   /** 空白 */
-  Space = 'Space'
+  Space = "Space",
 }
 
 /** 蛇移动的方向 */
 export enum Direction {
   /** 左移 */
-  Left = 'Left',
+  Left = "Left",
   /** 右移 */
-  Right = 'Right',
+  Right = "Right",
   /** 上移 */
-  Top = 'Top',
+  Top = "Top",
   /** 下移 */
-  Bottom = 'Bottom'
+  Bottom = "Bottom",
+}
+
+/** 游戏状态 */
+export enum GameStatusEnum {
+  /** 运行中 */
+  Running = "Running",
+  /** 暂停 */
+  Pause = "Pause",
+  /** 结束 */
+  Over = "Over",
 }
