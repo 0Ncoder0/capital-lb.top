@@ -8,7 +8,7 @@ export enum ItemEnum {
   /** 食物 */
   Food = "Food",
   /** 空白 */
-  Space = "Space",
+  Space = "Space"
 }
 
 /** 蛇移动的方向 */
@@ -20,7 +20,7 @@ export enum Direction {
   /** 上移 */
   Top = "Top",
   /** 下移 */
-  Bottom = "Bottom",
+  Bottom = "Bottom"
 }
 
 /** 游戏状态 */
@@ -30,5 +30,5 @@ export enum GameStatusEnum {
   /** 暂停 */
   Pause = "Pause",
   /** 结束 */
-  Over = "Over",
+  Over = "Over"
 }
