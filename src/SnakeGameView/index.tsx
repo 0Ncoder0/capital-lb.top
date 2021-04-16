@@ -9,6 +9,7 @@ import EventListener from "./event-listener/index";
 import GameBoard from "./components/game-board";
 import StatusController from "./components/status-controller";
 import SpeedController from "./components/speed-controller";
+import SourceCodeLink from "./components/source-code-link";
 
 /** 贪吃蛇 */
 export default class SnakeGameView extends React.Component {
@@ -47,13 +48,15 @@ export default class SnakeGameView extends React.Component {
     });
   };
 
-  private actionRowStyle = (): CSSProperties => ({
+  private rowStyle = (): CSSProperties => ({
     display: "flex",
     width: "400px",
-    marginLeft: "auto",
-    marginRight: "auto"
+    alignItems: "center"
   });
   private containerStyle = (): CSSProperties => ({
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
     paddingTop: (window.innerHeight - (400 + 32 + 24)) / 3 + "px"
   });
 
@@ -65,7 +68,7 @@ export default class SnakeGameView extends React.Component {
     const speed = getSpeed();
     return (
       <div style={this.containerStyle()}>
-        <div style={this.actionRowStyle()}>
+        <div style={this.rowStyle()}>
           <div style={{ width: "120px" }}>
             <StatusController status={status} pause={pause} start={start} restart={restart} />
           </div>
@@ -78,6 +81,11 @@ export default class SnakeGameView extends React.Component {
         <div style={{ height: "24px" }}></div>
         <div>
           <GameBoard gameMap={gameMap} />
+        </div>
+        <div style={{ height: "12px" }}></div>
+        <div style={this.rowStyle()}>
+          <div style={{ marginRight: "auto" }}></div>
+          <SourceCodeLink />
         </div>
       </div>
     );
