@@ -1,15 +1,37 @@
 import Food from "./food";
 import GameMap from "./game-map";
 import Snake from "./snake";
+import EventManager from "../util/event-manager";
 import { Direction, GameStatusEnum } from "./types";
+
+/** 事件列表 */
+interface EventMap {
+  /** 修改速度后 */
+  "change-speed": { speed: number };
+  /** 修改状态后 */
+  "change-status": { status: GameStatusEnum };
+  /** 单帧计算后 */
+  frame: { gameMap: GameMap };
+}
+
 /** 贪吃蛇游戏主体 */
 export default class SnakeGame {
+  /** 最大刷新率 */
+  static readonly maxInterval = 200;
+
   /** 计时器 */
   private timer: NodeJS.Timeout | null = null;
-  /** 状态 */
-  private _status = GameStatusEnum.Pause;
   /** 计时器间隔 */
-  private _interval = 110;
+  private interval = 100;
+  /** 状态 */
+  private status = GameStatusEnum.Pause;
+
+  /** 事件管理工具 */
+  private eventManager = new EventManager<EventMap>();
+  /** 触发事件方法 */
+  private emit = this.eventManager.emit;
+  /** 监听事件方法 */
+  public on = this.eventManager.addEventListener;
 
   /** 地图 */
   public gameMap = new GameMap();
@@ -19,47 +41,46 @@ export default class SnakeGame {
   public food = new Food();
 
   /** 状态 */
-  public set status(status: GameStatusEnum) {
-    this._status = status;
-    this.onStatusChanged && this.onStatusChanged(status);
-  }
+  public setStatus = (status: GameStatusEnum) => {
+    this.status = status;
+    this.emit("change-status", { status });
+    return this;
+  };
   /** 状态 */
-  public get status() {
-    return this._status;
-  }
-  /** 计时器间隔 */
-  set interval(interval: number) {
-    this._interval = interval;
-    this.onIntervalChanged && this.onIntervalChanged(interval);
-  }
-  /** 计时器间隔 */
-  get interval() {
-    return this._interval;
-  }
+  public getStatus = () => {
+    return this.status;
+  };
 
-  /** 单帧运行后的钩子函数 */
-  public onFrame: { (): void } | null = null;
-  /** 状态变更后的钩子函数 */
-  public onStatusChanged: { (status: GameStatusEnum): void } | null = null;
-  /** 计时器间隔变更后的钩子函数 */
-  public onIntervalChanged: { (interval: number): void } | null = null;
+  /** 设置速度，百分比 */
+  public setSpeed = (speed: number) => {
+    const { maxInterval } = SnakeGame;
+    this.interval = ((100 - speed) / 100) * maxInterval;
+    this.emit("change-speed", { speed });
+    return this;
+  };
+
+  /** 设置速度，百分比 */
+  public getSpeed = () => {
+    const { maxInterval } = SnakeGame;
+    return 100 - (this.interval / maxInterval) * 100;
+  };
 
   /** 开始游戏 */
   public start = () => {
+    this.setStatus(GameStatusEnum.Running);
     this.setTimer();
-    this.status = GameStatusEnum.Running;
     return this;
   };
   /** 暂停游戏 */
   public pause = () => {
+    this.setStatus(GameStatusEnum.Pause);
     this.clearTimer();
-    this.status = GameStatusEnum.Pause;
     return this;
   };
   /** 结束游戏 */
   public over = () => {
+    this.setStatus(GameStatusEnum.Over);
     this.clearTimer();
-    this.status = GameStatusEnum.Over;
     return;
   };
 
@@ -82,14 +103,13 @@ export default class SnakeGame {
 
   /** 设置计时器 */
   private setTimer = () => {
-    this.timer = setTimeout(() => {
-      this.runFrame();
-      this.onFrame && this.onFrame();
-      this.status === GameStatusEnum.Running && this.setTimer();
-    }, this.interval);
+    if (this.status === GameStatusEnum.Running) {
+      this.timer = setTimeout(() => this.runFrame().setTimer(), this.interval);
+    }
     return this;
   };
 
+  /** 清除计时器 */
   private clearTimer = () => {
     if (this.timer) clearTimeout(this.timer);
   };
@@ -99,39 +119,39 @@ export default class SnakeGame {
     const { snake, food, gameMap } = this;
     snake.move();
 
-    if (this.isSnakeRunOut || this.isSnakeRunIntoSelf) {
+    if (this.getIsSnakeRunOut() || this.getIsSnakeRunIntoSelf()) {
       this.over();
     } else {
       gameMap.clear();
       gameMap.set({ snake, food });
 
-      if (this.isSnakeRunIntoFood) {
+      if (this.getIsSnakeRunIntoFood()) {
         snake.lengthen();
         food.create(gameMap);
       }
     }
-
+    this.emit("frame", { gameMap });
     return this;
   };
 
   /** 蛇是否出界 */
-  get isSnakeRunOut() {
+  private getIsSnakeRunOut = () => {
     const [x, y] = this.snake.positions[0];
     const max = this.gameMap.maxLength;
     return x >= max || y >= max || x < 0 || y < 0;
-  }
+  };
   /** 蛇是否与自身碰撞 */
-  get isSnakeRunIntoSelf() {
+  private getIsSnakeRunIntoSelf = () => {
     const [sx, sy] = this.snake.positions[0];
     return !!this.snake.positions.find(([x, y], index) => index !== 0 && x === sx && y === sy);
-  }
+  };
   /** 蛇是否吃到食物 */
-  get isSnakeRunIntoFood() {
+  private getIsSnakeRunIntoFood = () => {
     if (this.food.position) {
       const [fx, fy] = this.food.position;
       return !!this.snake.positions.find(([x, y]) => x === fx && y === fy);
     } else {
       return false;
     }
-  }
+  };
 }

@@ -12,9 +12,9 @@ export default class EventListener {
     return this.setSpaceListener().setDirectionListener().setSpeedListener();
   }
 
-  /** 空格键操作 */
+  /** 状态操作 */
   setSpaceListener = () => {
-    window.addEventListener("keydown", event => {
+    document.addEventListener("keydown", event => {
       if (event.code !== "Space") return;
       /** 游戏状态 => 空格键操作 */
       const status2spaceAction = new Map([
@@ -23,13 +23,13 @@ export default class EventListener {
         [GameStatusEnum.Over, () => this.snakeGame.init().start()]
       ]);
 
-      const action = status2spaceAction.get(this.snakeGame.status);
+      const action = status2spaceAction.get(this.snakeGame.getStatus());
       if (action) action();
     });
     return this;
   };
 
-  /** 方向键操作 */
+  /** 方向操作 */
   setDirectionListener = () => {
     /** 方向 => 反方向 */
     const direction2opposite = new Map([
@@ -46,7 +46,7 @@ export default class EventListener {
       ["d", Direction.Right]
     ]);
 
-    window.addEventListener("keydown", event => {
+    document.addEventListener("keydown", event => {
       const key = event.key;
       const snake = this.snakeGame.snake;
 
@@ -61,23 +61,24 @@ export default class EventListener {
     return this;
   };
 
+  /** 速度操作 */
   setSpeedListener = () => {
-    window.addEventListener("keydown", event => {
+    document.addEventListener("keydown", event => {
       const key = event.key;
 
-      const increase = "-";
-      const decrease = "=";
-      let interval = this.snakeGame.interval;
+      const increase = "=";
+      const decrease = "-";
+      let speed = this.snakeGame.getSpeed();
 
       if (key === increase) {
-        interval += 10;
+        speed += 10;
       }
       if (key === decrease) {
-        interval -= 10;
+        speed -= 10;
       }
 
-      if (interval <= 200 && interval >= 10) {
-        this.snakeGame.interval = interval;
+      if (speed <= 100 && speed >= 10) {
+        this.snakeGame.setSpeed(speed);
       }
     });
     return this;

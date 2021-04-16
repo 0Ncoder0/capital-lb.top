@@ -1,5 +1,4 @@
-import React, { CSSProperties } from "react";
-import GameMap from "../core/game-map";
+import { CSSProperties } from "react";
 import { ItemEnum } from "../core/types";
 
 /** 地图元素 => 颜色 */
@@ -52,14 +51,12 @@ const Rows = (props: { gameMap: ItemEnum[][] }) => (
 );
 
 /** 游戏运行面板 */
-export default class GameBoard extends React.Component {
-  props!: { gameMap: GameMap };
+export const GameBoard = (props: { gameMap: ItemEnum[][] }) => {
+  return (
+    <div style={containerStyle()}>
+      <Rows gameMap={props.gameMap} />
+    </div>
+  );
+};
 
-  render() {
-    return (
-      <div style={containerStyle()}>
-        <Rows gameMap={this.props.gameMap} />
-      </div>
-    );
-  }
-}
+export default GameBoard;
