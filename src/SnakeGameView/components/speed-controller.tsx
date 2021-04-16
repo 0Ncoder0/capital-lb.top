@@ -9,6 +9,7 @@ export const SpeedController = (props: { speed: number; setSpeed: { (speed: numb
       min={10}
       step={10}
       onChange={value => props.setSpeed(value)}
+      formatter={value => value + "%"}
     ></InputNumber>
   );
 };

@@ -1,5 +1,5 @@
 import React, { CSSProperties } from "react";
-import { Tooltip } from "antd";
+import { message, notification, Tooltip } from "antd";
 
 import { GameStatusEnum } from "./core/types";
 import SnakeGame from "./core/main";
@@ -22,8 +22,23 @@ export default class SnakeGameView extends React.Component {
 
     this.snakeGame.on("change-status", event => {
       if (event.status === GameStatusEnum.Over) {
-        window.alert("Game Over");
+        message.error("Game Over !");
       }
+    });
+
+    notification.info({
+      message: "操作说明",
+      description: (
+        <div>
+          <div style={{ height: "12px" }}></div>
+          <div>空格键 : 开始 / 暂停 / 重新开始</div>
+          <div style={{ height: "12px" }}></div>
+          <div>W ↑ / S ↓ / A ← / D → : 控制方向</div>
+          <div style={{ height: "12px" }}></div>
+          <div>- / +: 调整速度</div>
+        </div>
+      ),
+      duration: 10
     });
   };
 

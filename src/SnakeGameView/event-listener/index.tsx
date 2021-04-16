@@ -39,19 +39,23 @@ export default class EventListener {
       [Direction.Right, Direction.Left]
     ]);
     /** 按键 => 方向 */
-    const key2direction = new Map([
-      ["w", Direction.Top],
-      ["s", Direction.Bottom],
-      ["a", Direction.Left],
-      ["d", Direction.Right]
+    const code2direction = new Map([
+      ["KeyW", Direction.Top],
+      ["ArrowUp", Direction.Top],
+      ["KeyS", Direction.Bottom],
+      ["ArrowDown", Direction.Bottom],
+      ["KeyA", Direction.Left],
+      ["ArrowLeft", Direction.Left],
+      ["KeyD", Direction.Right],
+      ["ArrowRight", Direction.Right]
     ]);
 
     document.addEventListener("keydown", event => {
-      const key = event.key;
+      const code = event.code;
       const snake = this.snakeGame.snake;
 
       const direction = snake.direction;
-      const dir = key2direction.get(key);
+      const dir = code2direction.get(code);
 
       const isOpposite = dir && direction2opposite.get(dir) === direction;
       if (dir && !isOpposite) {
@@ -64,16 +68,16 @@ export default class EventListener {
   /** 速度操作 */
   setSpeedListener = () => {
     document.addEventListener("keydown", event => {
-      const key = event.key;
+      const code = event.code;
 
-      const increase = "=";
-      const decrease = "-";
+      const increase = "Equal";
+      const decrease = "Minus";
       let speed = this.snakeGame.getSpeed();
 
-      if (key === increase) {
+      if (code === increase) {
         speed += 10;
       }
-      if (key === decrease) {
+      if (code === decrease) {
         speed -= 10;
       }
 
