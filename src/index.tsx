@@ -1,5 +1,11 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import RetroSnakeView from './SnakeGame/index'
+import React from "react";
+import ReactDOM from "react-dom";
+import SnakeGameView from "./SnakeGameView/index";
+import "antd/dist/antd.css";
 
-ReactDOM.render(<RetroSnakeView />, document.getElementById('root'))
+ReactDOM.render(
+  <React.StrictMode>
+    <SnakeGameView />
+  </React.StrictMode>,
+  document.getElementById("root")
+);
