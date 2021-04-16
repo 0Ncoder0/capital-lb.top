@@ -19,13 +19,18 @@ export default class SnakeGameView extends React.Component {
     this.snakeGame.on("change-speed", () => this.forceUpdate());
     this.snakeGame.on("change-status", () => this.forceUpdate());
     this.snakeGame.on("frame", () => this.forceUpdate());
+    this.snakeGame.on("change-status", ({ status }) => status === GameStatusEnum.Over && this.onGameOver());
 
-    this.snakeGame.on("change-status", event => {
-      if (event.status === GameStatusEnum.Over) {
-        message.error("Game Over !");
-      }
-    });
+    this.showInformation();
+  };
 
+  /** 游戏失败时 */
+  private onGameOver = () => {
+    message.error("Game Over !");
+  };
+
+  /** 弹出操作说明 */
+  private showInformation = () => {
     notification.info({
       message: "操作说明",
       description: (
