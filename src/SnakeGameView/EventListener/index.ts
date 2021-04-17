@@ -1,4 +1,4 @@
-import SnakeGame from "../core/main";
+import SnakeGame from "../core/Main";
 import { GameStatusEnum, Direction } from "../core/types";
 /** 控制器 */
 export default class EventListener {

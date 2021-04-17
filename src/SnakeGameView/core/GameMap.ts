@@ -1,5 +1,5 @@
-import Food from "./food";
-import Snake from "./snake";
+import Food from "./Food";
+import Snake from "./Snake";
 import { ItemEnum } from "./types";
 
 type MapItems = {

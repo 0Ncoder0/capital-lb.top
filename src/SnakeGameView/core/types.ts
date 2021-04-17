@@ -34,3 +34,32 @@ export enum GameStatusEnum {
   /** 结束 */
   Over = "Over"
 }
+
+/** 事件列表 */
+export interface EventMap {
+  /** 游戏初始化时 */
+  "game-init": {};
+  /** 修改速度后 */
+  "change-speed": { speed: number };
+  /** 修改状态后 */
+  "change-status": { status: GameStatusEnum };
+  /** 游戏结束 */
+  "game-over": {};
+  /** 单帧计算后 */
+  frame: { gameMap: ItemEnum[][] };
+}
+
+/** 单帧的游戏状态 */
+export interface FrameState {
+  /** 版本 */
+  version: string;
+  /** 蛇身状态 */
+  snake: {
+    positions: Position[];
+    direction: Direction;
+  };
+  /** 食物状态 */
+  food: {
+    position: Position | null;
+  };
+}

@@ -2,14 +2,14 @@ import React, { CSSProperties } from "react";
 import { message, notification, Tooltip } from "antd";
 
 import { GameStatusEnum } from "./core/types";
-import SnakeGame from "./core/main";
+import SnakeGame from "./core/Main";
 
-import EventListener from "./event-listener/index";
+import EventListener from "./EventListener/index";
 
-import GameBoard from "./components/game-board";
-import StatusController from "./components/status-controller";
-import SpeedController from "./components/speed-controller";
-import SourceCodeLink from "./components/source-code-link";
+import GameBoard from "./components/GameBoard";
+import StatusController from "./components/StatusController";
+import SpeedController from "./components/SpeedController";
+import SourceCodeLink from "./components/SourceCodeLink";
 
 /** 贪吃蛇 */
 export default class SnakeGameView extends React.Component {
@@ -22,6 +22,7 @@ export default class SnakeGameView extends React.Component {
     this.snakeGame.on("frame", () => this.forceUpdate());
     this.snakeGame.on("change-status", ({ status }) => status === GameStatusEnum.Over && this.onGameOver());
 
+    (window as any).snakeGame = this.snakeGame;
     this.showInformation();
   };
 
