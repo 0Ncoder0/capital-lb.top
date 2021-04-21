@@ -1,5 +1,6 @@
-import { Core, Processer, EventManager } from "..";
+import { EventManager } from "../event-manager";
 import { ItemType, State } from "../core";
+import { Core, Processer } from "..";
 
 interface EventMap {
   "change-state": { state: State };

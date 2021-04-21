@@ -1,15 +1,15 @@
-import { SnakeItem, State, Direction, EventManager } from "..";
+import { EventManager } from "../event-manager";
+import { SnakeItem, State, Direction } from "..";
 
 interface EventMap {
   "change-state": State;
 }
-
 export class SnakeProxy extends EventManager<EventMap> {
   public readonly snake: SnakeItem;
 
-  constructor(data:{snake: SnakeItem}) {
+  constructor(data: { snake: SnakeItem }) {
     super();
-    
+
     this.snake = new Proxy(data.snake, { set: this.setter });
   }
 
