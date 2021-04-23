@@ -8,8 +8,8 @@ export enum ItemType {
 export enum Direction {
   Left = "Left",
   Right = "Right",
-  Top = "Top",
-  Bottom = "Bottom"
+  Up = "Up",
+  Down = "Down"
 }
 
 export enum State {
