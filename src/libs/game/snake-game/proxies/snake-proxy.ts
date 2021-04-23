@@ -2,7 +2,7 @@ import { EventManager } from "../event-manager";
 import { SnakeItem, State, Direction } from "..";
 
 interface EventMap {
-  "change-state": State;
+  "change-state": { state: State };
 }
 export class SnakeProxy extends EventManager<EventMap> {
   public readonly snake: SnakeItem;
@@ -15,7 +15,7 @@ export class SnakeProxy extends EventManager<EventMap> {
 
   public setter<K extends keyof SnakeItem>(target: SnakeItem, key: K, value: SnakeItem[K]) {
     if (key === "state") {
-      this.emit("change-state", value as State);
+      this.emit("change-state", { state: value as State });
     }
 
     return true;
