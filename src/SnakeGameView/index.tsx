@@ -1,6 +1,6 @@
 import React, { CSSProperties } from "react";
 import { message, notification, Tooltip } from "antd";
-import 'antd/dist/antd.css'
+import "antd/dist/antd.css";
 
 import { GameStatusEnum } from "./core/types";
 import SnakeGame from "./core/main";
