@@ -1,0 +1,15 @@
+overwrite: true
+schema: https://48p1r2roz4.sse.codesandbox.io/
+documents: "src/**/(mutate|query).graphql"
+generates:
+  src/apollo/types.gen.ts:
+    plugins:
+      - typescript
+  src/:
+    preset: near-operation-file
+    presetConfig:
+      extension: .gen.ts
+      baseTypesPath: /apollo/types.gen.ts
+    plugins:
+      - typescript-operations
+      - typescript-generic-sdk 

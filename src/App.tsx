@@ -1,26 +1,20 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Vue, Component } from "vue-property-decorator";
+import "./app.scss";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+@Component
+export default class App extends Vue {
+  render() {
+    return (
+      <div id="app">
+        <div id="nav">
+          <router-link to="/">Home</router-link>
+          <span> | </span>
+          <router-link to="/about">About</router-link>
+          <span> | </span>
+          <router-link to="/graphql-example">GraphQL Example</router-link>
+        </div>
+        <router-view />
+      </div>
+    );
+  }
 }
-
-export default App;
