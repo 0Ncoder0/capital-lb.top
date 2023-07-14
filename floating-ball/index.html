@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div style="position: fixed; top: 24px; right: 24px; opacity: 0.3">按住鼠标，小球自会飞向你</div>
+    <script>
+      const distance = (p1, p2) => Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2);
+      const direction = (p1, p2) => ({
+        x: (p2.x - p1.x) / distance(p1, p2),
+        y: (p2.y - p1.y) / distance(p1, p2),
+      });
+
+      const useFloat = () => {
+        const float = document.createElement("div");
+        float.style.position = "fixed";
+        float.style.top = Math.random() * window.innerHeight + "px";
+        float.style.left = Math.random() * window.innerWidth + "px";
+        float.style.width = "50px";
+        float.style.height = "50px";
+        float.style.backgroundColor = "#bfbfbf";
+        float.style.borderRadius = "50%";
+        document.body.appendChild(float);
+        return float;
+      };
+
+      const usePosition = (element) => {
+        const width = +element.style.width.replace("px", "");
+        const height = +element.style.height.replace("px", "");
+
+        const position = {
+          x: +element.style.left.replace("px", "") + width / 2,
+          y: +element.style.top.replace("px", "") + height / 2,
+        };
+        return {
+          set x(value) {
+            if (value === position.x) return;
+            position.x = value;
+            element.style.left = value - width / 2 + "px";
+          },
+          get x() {
+            return position.x;
+          },
+          set y(value) {
+            if (value === position.y) return;
+            position.y = value;
+            element.style.top = value - height / 2 + "px";
+          },
+          get y() {
+            return position.y;
+          },
+        };
+      };
+
+      const useSpeed = (element) => {
+        const maxSpeed = 10;
+
+        const speed = { x: 0, y: 0 };
+        const acceleration = { x: 0, y: 0 };
+        const increaseFactor = 0.9;
+        const brakeFactor = 0.1;
+
+        return {
+          get x() {
+            return speed.x;
+          },
+          get y() {
+            return speed.y;
+          },
+          nextTick() {
+            speed.x += acceleration.x;
+            speed.y += acceleration.y;
+          },
+          brake() {
+            const dir = direction({ x: 0, y: 0 }, speed);
+            speed.x -= (dir.x || 0) * brakeFactor;
+            speed.y -= (dir.y || 0) * brakeFactor;
+          },
+          accelerate(direction) {
+            const maxX = maxSpeed / direction.x;
+            const maxY = maxSpeed / direction.y;
+
+            if (speed.x > maxX || speed.x < maxX) {
+              speed.x += direction.x * increaseFactor;
+            }
+            if (speed.y > maxY || speed.y < maxY) {
+              speed.y += direction.y * increaseFactor;
+            }
+          },
+        };
+      };
+
+      const float = useFloat();
+      const position = usePosition(float);
+      const speed = useSpeed(float);
+      let target = null;
+
+      setInterval(() => {
+        if (target) {
+          const dir = direction(position, target);
+          speed.accelerate(dir);
+        }
+
+        speed.brake();
+        speed.nextTick();
+        position.x += speed.x;
+        position.y += speed.y;
+      }, 1000 / 60);
+
+      window.addEventListener("mousedown", (event) => {
+        target = { x: event.clientX, y: event.clientY };
+      });
+
+      window.addEventListener("mousemove", (event) => {
+        if (target) target = { x: event.clientX, y: event.clientY };
+      });
+
+      window.addEventListener("mouseup", (event) => {
+        target = null;
+      });
+    </script>
+  </body>
+</html>

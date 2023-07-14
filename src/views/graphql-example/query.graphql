@@ -1,7 +1,0 @@
-query GetRates($currency: String!) {
-  rates(currency: $currency) {
-    currency
-    rate
-    name
-  }
-}
