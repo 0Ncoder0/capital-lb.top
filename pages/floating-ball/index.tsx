@@ -1,5 +1,5 @@
 import { Component, Vue } from 'vue-property-decorator'
-import { FloatingBall } from './main'
+import { FloatingBall } from './-main'
 
 @Component
 export default class extends Vue {
