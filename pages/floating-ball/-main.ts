@@ -2,7 +2,7 @@ import { Point } from '~/lib/_types'
 import { Mouse } from '~/lib/mouse'
 import { Speed } from '~/lib/speed'
 import { Timer } from '~/lib/timer'
-import { Utils } from '~/lib/utils'
+import { Calc } from '~/lib/calc'
 
 export class FloatingBall {
   public position: Point = { x: 0, y: 0 }
@@ -12,7 +12,7 @@ export class FloatingBall {
   private timer = new Timer(this.main.bind(this))
 
   private main() {
-    const dir = this.mouse.isHolding ? Utils.direction(this.position, this.mouse.position) : undefined
+    const dir = this.mouse.isHolding ? Calc.direction(this.position, this.mouse.position) : undefined
     this.speed.nextTick(dir)
 
     this.position.x += this.speed.x

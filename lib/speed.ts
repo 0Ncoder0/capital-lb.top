@@ -1,5 +1,5 @@
 import { Direction } from './_types'
-import { Utils } from './utils'
+import { Calc } from './calc'
 
 type SpeedConfig = {
   max: number
@@ -36,7 +36,7 @@ export class Speed {
   }
 
   private friction() {
-    const dir = Utils.direction({ x: 0, y: 0 }, this.speed)
+    const dir = Calc.direction({ x: 0, y: 0 }, this.speed)
     this.speed.x -= (dir.x || 0) * this.config.factors.friction
     this.speed.y -= (dir.y || 0) * this.config.factors.friction
   }
