@@ -6,28 +6,30 @@ export class RaceCar {
       height: 20,
       with: 12,
       direction: [0, -1],
-      maxSpeed: 5,
+      force: 0.03,
+      rotate: 0.03,
+      mass: 1,
     },
     wall: {
       height: 40,
       with: 24,
     },
     map: `
-    ********************************
-    ********************************
-    ****oooooooooo***ooooooooooo****
-    ****oo******oo***ooooooooooo****
-    ****oo******oo***ooo****oooo****
-    ****oo******oo***ooo****oooo****
-    ****oo******oo***ooo****oooo****
-    ****oo******oo***ooo****oooo****
-    ****oo******oo***ooo****oooo****
-    ****oo******oooooooo****oooo****
-    ****oo******oooooooo****oooo****
-    ****oo******************oooo****
-    ****oooooooooooooooooooooo$o****
-    ****oooooooooooooooooooooooo****
-    ********************************
+    *************************************
+    *************************************
+    ****oooooooooooooo***oooooooooooo****
+    ****oooooooooooooo***oooooooooooo****
+    ****oooo******oooo***oooooooooooo****
+    ****oooo******oooo***oooo****oooo****
+    ****oooo******oooo***oooo****oooo****
+    ****oooo******oooo***oooo****oooo****
+    ****oooo******oooo***oooo****oooo****
+    ****oooo******ooooooooooo****oooo****
+    ****oooo******ooooooooooo****oooo****
+    ****oooo*********************oooo****
+    ****ooooooooooooooooooooooooooo$o****
+    ****ooooooooooooooooooooooooooooo****
+    *************************************
     `,
   }
 
@@ -61,7 +63,7 @@ export class RaceCar {
     rotate: 0 as 0 | -1 | 1,
   }
 
-  private player = Bodies.rectangle(...RaceCar.getPlayerPosition(), RaceCar.config.car.height, RaceCar.config.car.with, { angle: -Math.PI / 2 })
+  private player = Bodies.rectangle(...RaceCar.getPlayerPosition(), RaceCar.config.car.height, RaceCar.config.car.with, { angle: -Math.PI / 2, mass: RaceCar.config.car.mass })
   private engine = Engine.create({ gravity: { x: 0, y: 0 } })
   private runner = Runner.create()
 
@@ -89,14 +91,14 @@ export class RaceCar {
 
     const speed = this.player.velocity
     const velocity = {
-      x: speed.x + direction[0] * state * 0.1,
-      y: speed.y + direction[1] * state * 0.1,
+      x: speed.x + direction[0] * state * RaceCar.config.car.force,
+      y: speed.y + direction[1] * state * RaceCar.config.car.force,
     }
 
     Body.setVelocity(this.player, velocity)
   }
 
   private rotate() {
-    Body.rotate(this.player, this.playState.rotate * 0.1)
+    Body.setAngularVelocity(this.player, this.playState.rotate * RaceCar.config.car.rotate)
   }
 }
