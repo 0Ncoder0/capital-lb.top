@@ -1,5 +1,25 @@
 import { Engine, Runner, Composite, Bodies, Render, Body } from 'matter-js'
 
+const maps = [
+  `
+  *************************************
+  *************************************
+  ****oooooooooooooo***oooooooooooo****
+  ****oooooooooooooo***oooooooooooo****
+  ****oooo******oooo***oooooooooooo****
+  ****oooo******oooo***oooo****oooo****
+  ****oooo******oooo***oooo****oooo****
+  ****oooo******oooo***oooo****oooo****
+  ****oooo******oooo***oooo****oooo****
+  ****oooo******ooooooooooo****oooo****
+  ****oooo******ooooooooooo****oooo****
+  ****oooo*********************oooo****
+  ****ooooooooooooooooooooooooooo$o****
+  ****ooooooooooooooooooooooooooooo****
+  *************************************
+  `,
+]
+
 export class RaceCar {
   public static config = {
     car: {
@@ -11,26 +31,10 @@ export class RaceCar {
       mass: 1,
     },
     wall: {
-      height: 40,
+      height: 24,
       with: 24,
     },
-    map: `
-    *************************************
-    *************************************
-    ****oooooooooooooo***oooooooooooo****
-    ****oooooooooooooo***oooooooooooo****
-    ****oooo******oooo***oooooooooooo****
-    ****oooo******oooo***oooo****oooo****
-    ****oooo******oooo***oooo****oooo****
-    ****oooo******oooo***oooo****oooo****
-    ****oooo******oooo***oooo****oooo****
-    ****oooo******ooooooooooo****oooo****
-    ****oooo******ooooooooooo****oooo****
-    ****oooo*********************oooo****
-    ****ooooooooooooooooooooooooooo$o****
-    ****ooooooooooooooooooooooooooooo****
-    *************************************
-    `,
+    map: maps[0],
   }
 
   private static getPlayerPosition(): [x: number, y: number] {
@@ -66,6 +70,7 @@ export class RaceCar {
   private player = Bodies.rectangle(...RaceCar.getPlayerPosition(), RaceCar.config.car.height, RaceCar.config.car.with, {
     angle: -Math.PI / 2,
     mass: RaceCar.config.car.mass,
+    frictionAir: 0.03,
   })
 
   private engine = Engine.create({ gravity: { x: 0, y: 0 } })
@@ -103,8 +108,6 @@ export class RaceCar {
 
   public setState(state: Partial<RaceCar['playState']>) {
     this.playState = { ...this.playState, ...state }
-    if (this.playState.accelerate === 0) Body.set(this.player, 'frictionAir', 0.03)
-    else Body.set(this.player, 'frictionAir', 0.01)
   }
 
   private accelerate() {
@@ -122,7 +125,8 @@ export class RaceCar {
   }
 
   private rotate() {
-    Body.setAngularVelocity(this.player, this.playState.rotate * RaceCar.config.car.rotate)
+    const angular = this.player.angularVelocity
+    Body.setAngularVelocity(this.player, this.playState.rotate * RaceCar.config.car.rotate - angular * 0.1)
   }
 
   public rebuild() {

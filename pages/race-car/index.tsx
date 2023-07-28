@@ -32,6 +32,9 @@ export default class extends Vue {
   }
 
   public mounted() {
+    const storedMap = sessionStorage.getItem('race-car-map') as string
+    if (storedMap) RaceCar.config.map = storedMap
+
     this.instance = new RaceCar(this.$refs.container as HTMLDivElement)
     this.instance.start()
     ;(window as any).config = RaceCar.config
