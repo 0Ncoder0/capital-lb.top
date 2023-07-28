@@ -5,6 +5,48 @@ const maps = [
   ****************************************
   ****************************************
   ****************************************
+  ****************************************
+  ****************************************
+  **********ooooo********oo***************
+  *********ooooooo*****ooooo****ooooo*****
+  ********ooooooooo***ooooooo**ooooooo****
+  ********ooo***ooo***ooooooo**ooooooo****
+  *******oooo**oooo**oooo*ooo*oooo*ooo****
+  *******oooo**ooo***ooo**oooo*ooo*ooo****
+  ********ooo**ooo***ooo***ooo*ooo*ooo****
+  ********ooo**ooo***ooo***ooo*ooo*ooo****
+  ****o***oooo*ooo***ooo***ooo*ooo*ooo****
+  ***ooo***ooo*ooo***ooo***ooo*ooo*ooo****
+  **oooo**oooo*ooo***ooo***ooo*ooo*ooo****
+  **oooo**ooo**ooo***ooo***ooo*ooo*ooo****
+  **ooooooooo**ooo***ooo***ooo*ooo*ooo****
+  **oooooooo***oooo**ooo***ooo*ooo*ooo****
+  **oooooooo****oooooooo***ooo*ooo*ooo****
+  *oooo*ooo*****ooooooo****ooo*ooo*ooo****
+  *ooo***********ooooo*****ooo*ooo*ooo****
+  *ooo*********************ooo*ooo*ooo****
+  *ooo***oooo*************oooo*ooo*ooo****
+  *ooo**oooooo************ooo**ooo*ooo****
+  *oooooooooooo***********ooo**ooo*ooo****
+  *ooooooo**ooo***********ooo**ooo*ooo****
+  **ooooo***ooo***********oooooooo*ooo****
+  ***oo*****oooo***ooo****oooooooo*o$o****
+  ***********ooo**ooooo****oooooo**ooo****
+  ***********ooo*ooooooo******oo**oooo****
+  ***********ooo*ooo*oooo********oooo*****
+  ***********ooo*ooo**ooo********ooo******
+  ***********oooooo***oooo******ooo*******
+  ************ooooo****oooooooooooo*******
+  *************ooo******oooooooooo********
+  ***********************oooooooo*********
+  ***************************oo***********
+  ****************************************
+  ****************************************
+  `,
+  `
+  ****************************************
+  ****************************************
+  ****************************************
   ************************oooooooo********
   **********************oooooooooooo******
   ********************ooooooooooooooo*****
@@ -83,7 +125,7 @@ export class RaceCar {
       if (char !== '*') return null
       const x = colIndex * wall.with
       const y = rowIndex * wall.height
-      return Bodies.rectangle(x, y, wall.with, wall.height, { isStatic: true })
+      return Bodies.rectangle(x, y, wall.with, wall.height, { isStatic: true, mass: 100, frictionStatic: 0, friction: 0, frictionAir: 0 })
     })
   })
 
