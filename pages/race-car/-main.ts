@@ -1,7 +1,7 @@
 import { Engine, Runner, Composite, Bodies, Render, Body } from 'matter-js'
 
 export class RaceCar {
-  private static config = {
+  public static config = {
     car: {
       height: 20,
       with: 12,
@@ -63,15 +63,31 @@ export class RaceCar {
     rotate: 0 as 0 | -1 | 1,
   }
 
-  private player = Bodies.rectangle(...RaceCar.getPlayerPosition(), RaceCar.config.car.height, RaceCar.config.car.with, { angle: -Math.PI / 2, mass: RaceCar.config.car.mass })
+  private player = Bodies.rectangle(...RaceCar.getPlayerPosition(), RaceCar.config.car.height, RaceCar.config.car.with, {
+    angle: -Math.PI / 2,
+    mass: RaceCar.config.car.mass,
+  })
+
   private engine = Engine.create({ gravity: { x: 0, y: 0 } })
   private runner = Runner.create()
+  private render: Render
+  private playground: HTMLElement
 
-  public setPlayground(playground: HTMLElement) {
-    Composite.add(this.engine.world, [...this.walls.flat(), this.player].filter(Boolean) as never)
+  constructor(playground: HTMLElement) {
+    this.playground = playground
+    this.render = Render.create({
+      element: playground,
+      engine: this.engine,
+      options: {
+        height: this.chars.length * RaceCar.config.wall.height,
+        width: this.chars[0].length * RaceCar.config.wall.with,
+      },
+    })
+  }
 
-    const render = Render.create({ element: playground, engine: this.engine })
-    Render.run(render)
+  public start() {
+    Composite.add(this.engine.world, [this.player, ...(this.walls.flat().filter(Boolean) as never)])
+    Render.run(this.render)
     Runner.run(this.runner, this.engine)
 
     setInterval(() => {
@@ -80,8 +96,15 @@ export class RaceCar {
     }, 1000 / 60)
   }
 
+  public stop() {
+    Render.stop(this.render)
+    Runner.stop(this.runner)
+  }
+
   public setState(state: Partial<RaceCar['playState']>) {
     this.playState = { ...this.playState, ...state }
+    if (this.playState.accelerate === 0) Body.set(this.player, 'frictionAir', 0.03)
+    else Body.set(this.player, 'frictionAir', 0.01)
   }
 
   private accelerate() {
@@ -100,5 +123,12 @@ export class RaceCar {
 
   private rotate() {
     Body.setAngularVelocity(this.player, this.playState.rotate * RaceCar.config.car.rotate)
+  }
+
+  public rebuild() {
+    this.stop()
+    this.playground.removeChild(this.playground.firstChild!)
+    Object.assign(this, new RaceCar(this.playground))
+    this.start()
   }
 }

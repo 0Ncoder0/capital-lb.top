@@ -3,7 +3,7 @@ import { RaceCar } from './-main'
 
 @Component
 export default class extends Vue {
-  public instance = new RaceCar()
+  public instance!: RaceCar
 
   public created() {
     window.addEventListener('keydown', (event) => {
@@ -32,10 +32,39 @@ export default class extends Vue {
   }
 
   public mounted() {
-    this.instance.setPlayground(window.document.body)
+    this.instance = new RaceCar(this.$refs.container as HTMLDivElement)
+    this.instance.start()
+    ;(window as any).config = RaceCar.config
+    ;(window as any).rebuild = () => this.instance.rebuild()
+  }
+
+  private Tips() {
+    return (
+      <div
+        style={{
+          position: 'fixed',
+          top: '24px',
+          right: '24px',
+          opacity: '0.3',
+        }}
+      >
+        <span>
+          按住 W 加速，按住 A D 转向
+          <br />
+          控制台输入 config 修改配置, rebuild() 使用配置
+          <br />
+          config.map 中 * 是墙, o 是路, $ 是玩家, 玩家初始状态为向上
+        </span>
+      </div>
+    )
   }
 
   public render() {
-    return <div></div>
+    return (
+      <div>
+        {this.Tips()}
+        <div ref="container" style="display:flex;margin-top:120px;justify-content:center"></div>
+      </div>
+    )
   }
 }
