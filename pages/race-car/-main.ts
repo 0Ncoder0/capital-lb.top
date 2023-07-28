@@ -2,21 +2,46 @@ import { Engine, Runner, Composite, Bodies, Render, Body } from 'matter-js'
 
 const maps = [
   `
-  *************************************
-  *************************************
-  ****oooooooooooooo***oooooooooooo****
-  ****oooooooooooooo***oooooooooooo****
-  ****oooo******oooo***oooooooooooo****
-  ****oooo******oooo***oooo****oooo****
-  ****oooo******oooo***oooo****oooo****
-  ****oooo******oooo***oooo****oooo****
-  ****oooo******oooo***oooo****oooo****
-  ****oooo******ooooooooooo****oooo****
-  ****oooo******ooooooooooo****oooo****
-  ****oooo*********************oooo****
-  ****ooooooooooooooooooooooooooo$o****
-  ****ooooooooooooooooooooooooooooo****
-  *************************************
+  ****************************************
+  ****************************************
+  ****************************************
+  ************************oooooooo********
+  **********************oooooooooooo******
+  ********************ooooooooooooooo*****
+  *******************ooooooooooooooooo****
+  *****************oooooooooooooooooooo***
+  ****************ooooooooo******oooooo***
+  ***************oooooooo*********oooooo**
+  **************ooooooo************ooooo**
+  **************ooooo**************ooooo**
+  *************oooooo**************ooooo**
+  ************oooooo***************ooooo**
+  ***********oooooo****************oo$oo**
+  **********oooooo****************oooooo**
+  *********oooooo*****************ooooo***
+  ********oooooo*****************oooooo***
+  *******oooooo******************ooooo****
+  *******ooooo******************oooooo****
+  ******oooooo******************ooooo*****
+  *****oooooo******************oooooo*****
+  *****ooooo*******************ooooo******
+  ****oooooo******************oooooo******
+  ****ooooo******************oooooo*******
+  ***oooooo*****************oooooo********
+  ***ooooo*****************oooooo*********
+  ***ooooo****************oooooo**********
+  **oooooo***************oooooo***********
+  **ooooo***************oooooo************
+  **ooooo**************oooooo*************
+  **ooooo************ooooooo**************
+  **ooooooo*********ooooooo***************
+  ***ooooooooooooooooooooo****************
+  ****ooooooooooooooooooo*****************
+  *****ooooooooooooooooo******************
+  ******oooooooooooooo********************
+  ********ooooooooooo*********************
+  ************oooo************************
+  ************o***************************
   `,
 ]
 
@@ -26,7 +51,7 @@ export class RaceCar {
       height: 20,
       with: 12,
       direction: [0, -1],
-      force: 0.03,
+      force: 0.1,
       rotate: 0.03,
       mass: 1,
     },
