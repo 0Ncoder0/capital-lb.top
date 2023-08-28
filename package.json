@@ -23,7 +23,7 @@
   "dependencies": {
     "ant-design-vue": "1.x",
     "matter-js": "^0.19.0",
-    "nuxt": "^2.15.8",
+    "nuxt": "^3.7.0",
     "vue": "^2.7.10",
     "vue-class-component": "^7.2.6",
     "vue-property-decorator": "^9.1.2",
