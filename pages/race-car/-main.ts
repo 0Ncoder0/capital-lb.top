@@ -1,6 +1,6 @@
-import { Engine, Runner, Composite, Bodies, Render, Body } from 'matter-js'
+import { Engine, Runner, Composite, Bodies, Render, Body, Events, Query } from 'matter-js'
 
-const maps = [
+export const maps = [
   `
   ****************************************
   ****************************************
@@ -104,7 +104,7 @@ export class RaceCar {
     map: maps[0],
   }
 
-  private static getPlayerPosition(): [x: number, y: number] {
+  public static getPlayerPosition(): [x: number, y: number] {
     const chars = RaceCar.config.map
       .trim()
       .split('\n')
@@ -114,12 +114,12 @@ export class RaceCar {
     return [x * RaceCar.config.wall.with, y * RaceCar.config.wall.height]
   }
 
-  private chars = RaceCar.config.map
+  public chars = RaceCar.config.map
     .trim()
     .split('\n')
     .map((row) => row.trim().split(''))
 
-  private walls = this.chars.map((row, rowIndex) => {
+  public walls = this.chars.map((row, rowIndex) => {
     const { wall } = RaceCar.config
     return row.map((char, colIndex) => {
       if (char !== '*') return null
@@ -129,21 +129,21 @@ export class RaceCar {
     })
   })
 
-  private playState = {
+  public playState = {
     accelerate: 0 as 0 | -1 | 1,
     rotate: 0 as 0 | -1 | 1,
   }
 
-  private player = Bodies.rectangle(...RaceCar.getPlayerPosition(), RaceCar.config.car.height, RaceCar.config.car.with, {
+  public player = Bodies.rectangle(...RaceCar.getPlayerPosition(), RaceCar.config.car.height, RaceCar.config.car.with, {
     angle: -Math.PI / 2,
     mass: RaceCar.config.car.mass,
     frictionAir: 0.03,
   })
 
-  private engine = Engine.create({ gravity: { x: 0, y: 0 } })
-  private runner = Runner.create()
-  private render: Render
-  private playground: HTMLElement
+  public engine = Engine.create({ gravity: { x: 0, y: 0 } })
+  public runner = Runner.create()
+  public render: Render
+  public playground: HTMLElement
 
   constructor(playground: HTMLElement) {
     this.playground = playground
@@ -177,7 +177,7 @@ export class RaceCar {
     this.playState = { ...this.playState, ...state }
   }
 
-  private accelerate() {
+  public accelerate() {
     const state = this.playState.accelerate
     const angle = this.player.angle
     const direction = [Math.cos(angle), Math.sin(angle)]
@@ -191,7 +191,7 @@ export class RaceCar {
     Body.setVelocity(this.player, velocity)
   }
 
-  private rotate() {
+  public rotate() {
     const angular = this.player.angularVelocity
     Body.setAngularVelocity(this.player, this.playState.rotate * RaceCar.config.car.rotate - angular * 0.1)
   }
@@ -201,5 +201,85 @@ export class RaceCar {
     this.playground.removeChild(this.playground.firstChild!)
     Object.assign(this, new RaceCar(this.playground))
     this.start()
+  }
+}
+
+export class Sensor {
+  static config = {
+    max: 200,
+    count: 20,
+    range: Math.PI / 2,
+  }
+  public car: RaceCar
+  public detectors: { angle: number; distance: number; body: Body }[] = []
+
+  constructor(car: RaceCar) {
+    const { count, max, range } = Sensor.config
+    this.car = car
+    this.detectors = new Array(count)
+      .fill(0)
+      .map((_, i) => ({ angle: (i - count / 2) * (range / count), distance: max }))
+      .map((detector) => {
+        const angle = car.player.angle + detector.angle
+        const position = { x: car.player.position.x + Math.cos(angle) * max, y: car.player.position.y + Math.sin(angle) * max }
+        const body = Bodies.rectangle(position.x, position.y, 3, 3, { isSensor: true })
+        return { ...detector, body }
+      })
+
+    // this.detectors.forEach((detector) => Composite.add(car.engine.world, detector.body));
+    Events.on(car.engine, 'beforeUpdate', () => this.detect())
+  }
+
+  public detect() {
+    const cardBody = this.car.player
+    this.detectors.forEach((detector) => {
+      const angle = cardBody.angle + detector.angle
+      const endPoint = { x: cardBody.position.x + Math.cos(angle) * Sensor.config.max, y: cardBody.position.y + Math.sin(angle) * Sensor.config.max }
+      const ray = Query.ray(this.car.walls.flat().filter(Boolean) as never, cardBody.position, endPoint, 1)
+      let distance = Sensor.config.max
+      let dx = endPoint.x
+      let dy = endPoint.y
+      ray.forEach((item) => {
+        const d = Math.sqrt((item.bodyA.position.x - cardBody.position.x) ** 2 + (item.bodyA.position.y - cardBody.position.y) ** 2)
+        if (d > distance) return
+        distance = d
+        dx = item.bodyA.position.x
+        dy = item.bodyA.position.y
+      })
+      detector.distance = distance
+      detector.body.position = { x: dx, y: dy }
+    })
+  }
+}
+
+export class AI {
+  public car: RaceCar
+  public sensor: Sensor
+
+  constructor(car: RaceCar, sensor: Sensor) {
+    this.car = car
+    this.sensor = sensor
+    Events.on(car.engine, 'beforeUpdate', () => this.think())
+  }
+
+  public think() {
+    const { detectors } = this.sensor
+    const { count, max } = Sensor.config
+    const center = detectors.slice(Math.floor(count * 0.3), Math.floor(count * 0.7))
+    const left = detectors.slice(0, Math.floor(count * 0.3))
+    const right = detectors.slice(Math.floor(count * 0.7))
+
+    const isFrontClear = center.every((detector) => detector.distance > max - 10)
+    if (isFrontClear) {
+      this.car.setState({ accelerate: 1 })
+      this.car.setState({ rotate: 0 })
+    } else {
+      const leftDistance = left.reduce((sum, detector) => sum + detector.distance, 0) / left.length
+      const rightDistance = right.reduce((sum, detector) => sum + detector.distance, 0) / right.length
+      const direction = leftDistance > rightDistance ? -1 : 1
+
+      this.car.setState({ accelerate: 1 })
+      this.car.setState({ rotate: direction })
+    }
   }
 }
